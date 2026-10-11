@@ -59,6 +59,13 @@ curl -sqL "https://steamcdn-a.akamaihd.net/client/installer/steamcmd_linux.tar.g
 sudo tar -xzf steamcmd_linux.tar.gz -C /home/dayz/servers/steamcmd
 rm steamcmd_linux.tar.gz
 ```
+Create the shared Steam Workshop directory used by all server instances:
+
+```bash
+mkdir -p ~/servers/workshop_shared
+```
+
+This directory stores the downloaded Workshop content shared between server instances. It must exist before running `update.sh` for the first time.
 
 ## 6 — Create the server user and prepare sudoers
 
