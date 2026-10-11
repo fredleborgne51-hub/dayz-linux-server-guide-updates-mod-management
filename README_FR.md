@@ -61,10 +61,10 @@ sudo tar -xzf steamcmd_linux.tar.gz -C /home/dayz/servers/steamcmd
 rm steamcmd_linux.tar.gz
 ```
 
-Créez le répertoire partagé du Steam Workshop utilisé par toutes les instances éventuelles :
+Créez le répertoire partagé du Steam Workshop utilisé par toutes les instances éventuelles .
 
 ```bash
-mkdir -p /home/dayz/servers/workshop_shared
+sudo mkdir -p /home/dayz/servers/workshop_shared
 ```
 
 Ce répertoire stocke le contenu du Workshop et le partage entre les instances des serveurs. Il doit exister avant la première exécution de `update.sh`.
