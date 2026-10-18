@@ -501,3 +501,10 @@ DayZServer
 systemd = service management
 journalctl = diagnostics
 ```
+## Related project
+
+See DSXT [DayZ Server xml Tool ](https://github.com/fredleborgne51-hub/dayz-server-xml-tool) for quick and efficient management of custom DayZ mission XML blocks.
+
+## License
+
+DSXT is distributed under the MIT License. See [LICENSE](LICENSE) for details.
