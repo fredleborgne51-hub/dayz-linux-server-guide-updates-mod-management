@@ -506,7 +506,7 @@ journalctl = diagnostic
 ```
 ## Related project
 
-Consultez DSXT [DayZ Server xml Tool ](https://github.com/fredleborgne51-hub/dayz-server-xml-tool) pour gérer rapidement et efficacement les blocs XML personnalisés des missions DayZ.
+Consultez DSXT [DayZ Server xml Tool ](https://github.com/fredleborgne51-hub/dayz-server-xml-tool/blob/main/README_FR.md) pour gérer rapidement et efficacement les blocs XML personnalisés des missions DayZ.
 
 ## License
 
