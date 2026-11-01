@@ -1,4 +1,4 @@
-# DAYZ — SERVEUR DÉDIÉ LINUX - Mise à jour - Gestion des mods 
+# DAYZ — SERVEUR DÉDIÉ LINUX – Mises à jour – Gestion des mods 
 
 [GB English version](README.md)
 
@@ -18,7 +18,7 @@ Le serveur DayZ est exécuté par l'utilisateur Linux dédié `dayz`, et non par
 
 **Contexte : explication — aucune commande**
 
-La configuration humaine est conservée dans `mods.conf`. Le script `update.sh` met à jour et prépare le serveur, puis génère `mod_list.conf`. Le script `start.sh` lit cette liste et lance DayZ. `systemd` orchestre l'ensemble et `journalctl` permet le diagnostic.
+La configuration maintenue manuellement est stockée dans `mods.conf` pour les mods côté client et dans `servermods.conf` pour les mods côté serveur. Le script `update.sh` met à jour et prépare le serveur, puis génère `mod_list.conf` et `servermod_list.conf`. Le script `start.sh` lit ces deux listes générées et lance DayZ. `systemd` orchestre l'ensemble et `journalctl` permet le diagnostic.
 
 
 ## 3 — Préparer le système
@@ -198,13 +198,26 @@ Créer `~/servers/dayz-server/mods.conf` avec le format suivant :
 1828439124 | @VPPAT
 ```
 
-Les lignes commençant par `#` (commentaire) et les lignes vides sont ignorées. Pour désactiver un mod, commenter sa ligne.
+Ce fichier liste les mods côté client.
 
-## 13 — Créer `update.sh` 0.3.0
+Créer `~/servers/dayz-server/servermods.conf` avec le format suivant :
+
+```text
+# SteamWorkshopID | @Nom_du_mod
+
+# Nasdara Véhicule Fuel Fix
+3820528827 | @Nasdara_VehicleFuelFix
+```
+
+Ce fichier liste les mods côté serveur.
+
+Les lignes commençant par `#` (commentaires) et les lignes vides sont ignorées. Pour désactiver un mod, commenter sa ligne.
+
+## 13 — Créer `update.sh` 0.4.0
 
 **Contexte : Utilisateur dayz**
 
-Copier le script `update.sh` validé dans `~/servers/dayz-server/update.sh`. Il valide `mods.conf`, met à jour DayZ et les mods Workshop, prépare les liens et les clés `.bikey`, puis génère `mod_list.conf`.
+Copier le script `update.sh` validé dans `~/servers/dayz-server/update.sh`. Il valide `mods.conf` et `servermods.conf`, met à jour DayZ et les mods Workshop, prépare les liens et les clés `.bikey`, puis génère `mod_list.conf` et `servermod_list.conf`.
 
 Le fichier complet est disponible dans [`scripts/FR/update.sh`](scripts/FR/update.sh). Modifiez la variable STEAM_USER par votre identifiant Steam .
 
@@ -217,23 +230,23 @@ chmod +x ~/servers/dayz-server/update.sh
 
 Le script utilise une session SteamCMD unique pour l'ensemble des mods et retourne 78 lorsqu'une erreur critique empêche de garantir un état cohérent.
 
-## 14 — Comprendre `mod_list.conf`
+## 14 — Comprendre `mod_list.conf` et `servermod_list.conf`
 
 **Contexte : Utilisateur dayz**
 
-Ce fichier est généré par `update.sh` et ne doit normalement pas être modifié manuellement. Un fichier absent est une erreur ; un fichier vide signifie un démarrage vanilla.
+Ces deux fichiers sont générés par `update.sh` et ne doivent normalement pas être modifiés manuellement. `mod_list.conf` contient les mods côté client ; `servermod_list.conf` contient les mods côté serveur. L'absence de l'un des fichiers constitue une erreur. Si les deux fichiers existent et sont vides, le serveur démarre en mode vanilla.
 
-Exemple :
+Exemple de `mod_list.conf` :
 
 ```text
 @CF;@VPPAT;@Code_Lock
 ```
 
-## 15 — Créer `start.sh` 0.2.0
+## 15 — Créer `start.sh` 0.3.0
 
 **Contexte : Utilisateur dayz**
 
-Copier le script `start.sh` validé dans le répertoire du serveur. Il lit exclusivement `mod_list.conf` et lance DayZ. Le port utilisé dans cette installation de base est `2301` ; il peut être adapté pour une autre instance.
+Copier le script `start.sh` validé dans le répertoire du serveur. Il lit `mod_list.conf` et `servermod_list.conf`, puis lance DayZ. Le port utilisé dans cette installation de base est `2301` ; il peut être adapté pour une autre instance.
 
 Le fichier complet est disponible dans [`scripts/FR/start.sh`](scripts/FR/start.sh).
 
@@ -316,7 +329,7 @@ Le service doit passer à l'état `failed`, sans boucle de redémarrage automati
 
 **Contexte : Utilisateur dayz**
 
-Modifier `mods.conf`, ajouter ou commenter une ligne, puis redémarrer le service. Les fichiers Workshop déjà téléchargés et les anciens liens ne sont pas automatiquement supprimés.
+Modifier `mods.conf` ou `servermods.conf`, ajouter ou commenter une ligne, puis redémarrer le service. Les fichiers Workshop déjà téléchargés et les anciens liens ne sont pas automatiquement supprimés.
 
 ```bash
 nano ~/servers/dayz-server/mods.conf
@@ -456,7 +469,9 @@ Le port secondaire doit être considéré comme occupé lors du choix des ports 
         ├── DayZServer
         ├── serverDZ.cfg
         ├── mods.conf
+        ├── servermods.conf
         ├── mod_list.conf
+        ├── servermod_list.conf
         ├── update.sh
         ├── start.sh
         ├── keys/
@@ -471,8 +486,9 @@ Le port secondaire doit être considéré comme occupé lors du choix des ports 
 - [ ] SteamCMD installé
 - [ ] DayZ installé
 - [ ] `mods.conf` créé
-- [ ] `update.sh` 0.3.0 installé et exécutable
-- [ ] `start.sh` 0.2.0 installé et exécutable
+- [ ] `servermods.conf` créé
+- [ ] `update.sh` 0.4.0 installé et exécutable
+- [ ] `start.sh` 0.3.0 installé et exécutable
 - [ ] sudoers configuré et vérifié
 - [ ] service systemd créé
 - [ ] `daemon-reload` effectué
@@ -480,6 +496,7 @@ Le port secondaire doit être considéré comme occupé lors du choix des ports 
 - [ ] premier démarrage réussi
 - [ ] `status` et `journalctl` vérifiés
 - [ ] `mod_list.conf` généré
+- [ ] `servermod_list.conf` généré
 - [ ] configuration modded testée
 - [ ] optionnel : configuration vanilla testée
 - [ ] optionnel : Workshop ID invalide testé
@@ -492,10 +509,12 @@ Le port secondaire doit être considéré comme occupé lors du choix des ports 
 
 ```text
 mods.conf
+servermods.conf
     ↓
 update.sh
     ↓
 mod_list.conf
+servermod_list.conf
     ↓
 start.sh
     ↓
@@ -504,10 +523,10 @@ DayZServer
 systemd = gestion du service
 journalctl = diagnostic
 ```
-## Related project
+## Projet associé
 
 Consultez DSXT [DayZ Server xml Tool ](https://github.com/fredleborgne51-hub/dayz-server-xml-tool/blob/main/README_FR.md) pour gérer rapidement et efficacement les blocs XML personnalisés des missions DayZ.
 
-## License
+## Licence
 
-Ce guide est distribué sous license MIT . Consultez le fichier [LICENSE](LICENSE) pour plus de détails.
+Ce guide est distribué sous licence MIT. Consultez le fichier [LICENSE](LICENSE) pour plus de détails.
