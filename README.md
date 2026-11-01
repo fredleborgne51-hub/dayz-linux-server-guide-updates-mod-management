@@ -324,7 +324,7 @@ The service should enter the `failed` state without an automatic restart loop.
 
 **Context: User `dayz`**
 
-Modify `mods.conf`, add or comment out a line, then restart the service. Already downloaded Workshop files and old links are not automatically removed.
+Modify `mods.conf`or `servermods.conf`, add or comment out a line, then restart the service. Already downloaded Workshop files and old links are not automatically removed.
 
 ```bash
 nano ~/servers/dayz-server/mods.conf
