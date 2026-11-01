@@ -185,7 +185,7 @@ Des liens symboliques les exposent ensuite dans le serveur sous leur nom `@...`.
 
 Le répertoire Workshop mutualisé est préparé en dehors de `update.sh`, dans les étapes d'installation du serveur.
 
-## 12 — Créer `mods.conf`
+## 12 — Créer `mods.conf` et `servermods.conf`
 
 **Contexte : Utilisateur dayz**
 
